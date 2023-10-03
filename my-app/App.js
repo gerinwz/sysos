@@ -88,10 +88,12 @@ export default function OSForm() {
       <View style={styles.container}>
         {!loggedIn ? (
           <Modal visible={modalVisible} animationType="slide" transparent={true}>
-            <View style={styles.modalContainer}>
-              <ImageBackground source={require('./logo.jpg')} style={styles.backgroundImage}>
-                <View style={styles.loginContainer}>
-                  <Text style={styles.infOs}>Faça o Login</Text>
+          <View style={styles.modalContainer}>
+            {/* Fundo semitransparente */}
+            <View style={styles.modalBackground}></View>
+            <ImageBackground source={require('./logo.jpg')} style={styles.backgroundImage}>
+              <View style={styles.loginContainer}>
+                <Text style={styles.infOs}>Faça o Login</Text>
                   <TextInput
                     placeholder="Nome de Usuário"
                     style={styles.input}
@@ -116,7 +118,8 @@ export default function OSForm() {
           </Modal>
         ) : (
           <ScrollView style={styles.appBorder}>
-            <Text style={styles.infOs}>Informações da OS</Text>
+            <View style={styles.osInfoBackground}>
+            <Text style={styles.infOs}>Ordem de Serviço MetalSoft</Text>
       <Field label="Data Emissao" value={formData.dataEmissao} onChangeText={(text) => setFormData({ ...formData, dataEmissao: text })} />
       <Field label="Atendente" value={formData.atendente} onChangeText={(text) => setFormData({ ...formData, atendente: text })} />
       <Field label="Situacao" value={formData.situacao} onChangeText={(text) => setFormData({ ...formData, situacao: text })} />
@@ -160,8 +163,10 @@ export default function OSForm() {
      
       <Button title="Sair" onPress={handleLogout} />
       <Button title="Gerar CSV" onPress={createCSV} />
+      </View>
           </ScrollView>
         )}
+        
       </View>
     </ImageBackground>
   );
@@ -179,8 +184,15 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: '100%',
+    justifyContent: 'center',
     alignItems: 'center',
+  },
+  modalBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Cor de fundo com transparência
   },
   loginContainer: {
@@ -198,6 +210,12 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'black',
   },
+  osInfoBackground: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Cor de fundo com transparência
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginBottom: 16,
+  },
   botao: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -205,16 +223,23 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   infOs: {
-    margin:30,
-    textAlign: 'center',
-    fontSize: 22,
-    fontWeight: 'bold',
-  },
-  sectionLabel: {
-    fontSize: 18,
-    fontWeight: 'bold',
     marginTop: 16,
     marginBottom: 8,
+    alignItems:'center',
+    color: 'white', // Cor do texto branca
+    fontSize: 28,
+    fontWeight: 'bold',
+    textShadowColor: 'black', // Cor da sombra
+    textShadowOffset: { width: 2, height: 2 }, // Tamanho da sombra
+    textShadowRadius: 4, // Raio da sombra
+  },
+  sectionLabel: {
+    color: 'white', // Cor do texto branca
+    fontSize: 22,
+    fontWeight: 'bold',
+    textShadowColor: 'black', // Cor da sombra
+    textShadowOffset: { width: 2, height: 2 }, // Tamanho da sombra
+    textShadowRadius: 4, // Raio da sombra
   },
   input: {
     height: 40,
