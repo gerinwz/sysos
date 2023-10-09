@@ -11,8 +11,9 @@ import {
   ImageBackground,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
-import * as FileSystem from "expo-file-system";
+import { FileSystem } from "expo-file-system";
 import * as MailComposer from "expo-mail-composer";
+
 
 const Field = ({ label, value, onChangeText }) => (
   <View>
@@ -87,26 +88,19 @@ export default function OSForm() {
 
       const csvString = csvData.join("\n");
 
-      // Nome do arquivo CSV
-      const fileName = `os_data.csv`;
+      // Gere um nome de arquivo único, por exemplo, com base na data e hora
+      const now = new Date();
+      const fileName = `os_data_${now.getFullYear()}${
+        now.getMonth() + 1
+      }${now.getDate()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}.csv`;
 
-      // Caminho para a pasta "assets/arquivos"
-      const assetsDirectory = `${FileSystem.documentDirectory}assets/arquivos/`;
-
-      // Verifique se a pasta "assets/arquivos" existe e a crie, se necessário
-      await FileSystem.makeDirectoryAsync(assetsDirectory, {
-        intermediates: true,
-      });
-
-      // Caminho completo do arquivo CSV
-      const fileUri = `${assetsDirectory}${fileName}`;
-
-      // Use o Expo FileSystem para criar o arquivo CSV
+      // Use a API de sistema de arquivos do React Native para salvar o arquivo
+      const fileUri = `${FileSystem.documentDirectory}${fileName}`;
       await FileSystem.writeAsStringAsync(fileUri, csvString, {
         encoding: FileSystem.EncodingType.UTF8,
       });
 
-      alert(`Arquivo CSV criado com sucesso em: ${fileUri}`);
+      alert(`Arquivo CSV criado com sucesso: ${fileUri}`);
     } catch (error) {
       console.error("Erro ao criar o arquivo CSV:", error);
       alert(
