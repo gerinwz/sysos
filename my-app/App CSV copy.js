@@ -102,24 +102,6 @@ export default function OSForm() {
       });
 
       alert(`Arquivo CSV criado com sucesso em: ${fileUri}`);
-
-      // Enviar o arquivo CSV por e-mail
-      const emailSubject = "Assunto do E-mail";
-      const emailBody = "Corpo do E-mail";
-      const recipients = ["rogerinwz@icloud.com"]; // Adicione os destinatários desejados
-
-      const attachment = {
-        uri: fileUri, // Caminho completo do arquivo CSV
-        mimeType: "text/csv",
-        filename: "os_data.csv", // Nome do arquivo no e-mail
-      };
-
-      await MailComposer.composeAsync({
-        subject: emailSubject,
-        body: emailBody,
-        recipients: recipients,
-        attachments: [attachment],
-      });
     } catch (error) {
       console.error("Erro ao criar o arquivo CSV:", error);
       alert(
