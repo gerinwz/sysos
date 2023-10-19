@@ -16,7 +16,7 @@ import * as MailComposer from "expo-mail-composer";
 
 const Field = ({ label, value, onChangeText }) => (
   <View>
-    <Text>{label}:</Text>
+    <Text style={styles.label}>{label}:</Text>
     <TextInput style={styles.input} value={value} onChangeText={onChangeText} />
   </View>
 );
@@ -47,9 +47,9 @@ export default function OSForm() {
     assinaturaResponsavelMetalsoft: "",
     assinaturaResponsavelCliente: "",
     dataSelecionada: "",
-    activeDateField: "", // Campo de data ativo
-    isCalendarVisible: false, // Visibilidade do calendário
-    calendarPosition: {}, // Posição do calendário
+    activeDateField: "",
+    isCalendarVisible: false,
+    calendarPosition: {},
   });
 
   const handleDateFieldFocus = (fieldName, layout) => {
@@ -155,7 +155,6 @@ export default function OSForm() {
             transparent={true}
           >
             <View style={styles.modalContainer}>
-              {/* Fundo semitransparente */}
               <View style={styles.modalBackground}></View>
               <ImageBackground
                 source={require("./logo.jpg")}
@@ -247,31 +246,6 @@ export default function OSForm() {
                   setFormData({ ...formData, descricaoSolicitacao: text })
                 }
                 multiline
-              />
-
-              <Text style={styles.sectionLabel}>
-                Quadro de Horários Metalsoft
-              </Text>
-              <Field
-                label="Entrada"
-                value={formData.entradaMetalsoft}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, entradaMetalsoft: text })
-                }
-              />
-              <Field
-                label="Saída"
-                value={formData.saidaMetalsoft}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, saidaMetalsoft: text })
-                }
-              />
-              <Field
-                label="Chegada"
-                value={formData.chegadaMetalsoft}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, chegadaMetalsoft: text })
-                }
               />
 
               <Text style={styles.sectionLabel}>
@@ -399,8 +373,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "flex-center", // Alinhe o conteúdo no início (parte superior) do contêiner
+    alignItems: "center", // Centralize horizontalmente
+    paddingTop: 20, // Adicione um espaço superior para evitar que o conteúdo fique muito próximo à parte superior
   },
   modalContainer: {
     flex: 1,
@@ -413,16 +388,17 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Cor de fundo com transparência
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   loginContainer: {
-    width: "100%", // Largura do modal
-    backgroundColor: "white",
+    flex: 1,
+    width: "100%",
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
     padding: 20,
     borderRadius: 10,
-    margin: "100%",
-    marginVertical: "80%",
+    margin: "50%",
     justifyContent: "center",
+    height: 150,
   },
   appBorder: {
     width: "100%",
@@ -431,35 +407,35 @@ const styles = StyleSheet.create({
     borderColor: "black",
   },
   osInfoBackground: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Cor de fundo com transparência
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     paddingHorizontal: 16,
     paddingVertical: 8,
     marginBottom: 16,
   },
-  botao: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  infOs: {
-    marginTop: 16,
-    marginBottom: 8,
-    alignItems: "center",
-    color: "white", // Cor do texto branca
-    fontSize: 28,
-    fontWeight: "bold",
-    textShadowColor: "black", // Cor da sombra
-    textShadowOffset: { width: 2, height: 2 }, // Tamanho da sombra
-    textShadowRadius: 4, // Raio da sombra
-  },
   sectionLabel: {
-    color: "white", // Cor do texto branca
+    color: "white",
     fontSize: 22,
     fontWeight: "bold",
-    textShadowColor: "black", // Cor da sombra
-    textShadowOffset: { width: 2, height: 2 }, // Tamanho da sombra
-    textShadowRadius: 4, // Raio da sombra
+    textShadowColor: "black",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
+    textDecorationLine: "underline",
+  },
+  infOs: {
+    color: "white",
+    fontSize: 25,
+    fontWeight: "bold",
+    textShadowColor: "black",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
+  },
+  label: {
+    color: "white",
+    fontSize: 15,
+    fontWeight: "bold",
+    textShadowColor: "black",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
   },
   input: {
     height: 40,
@@ -467,6 +443,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 16,
     paddingHorizontal: 8,
+    color: "white",
   },
   button: {
     backgroundColor: "white", // Cor de fundo branca para os botões

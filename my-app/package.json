@@ -8,6 +8,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web"
   },
+  "android": {
+    "permissions": ["WRITE_EXTERNAL_STORAGE"]
+  },  
   "dependencies": {
     "expo": "~49.0.13",
     "expo-file-system": "~15.4.4",
@@ -23,5 +26,6 @@
   "devDependencies": {
     "@babel/core": "^7.20.0"
   },
+  
   "private": true
 }
