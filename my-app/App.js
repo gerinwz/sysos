@@ -8,7 +8,7 @@ import {
   Button,
   Modal,
   TouchableOpacity,
-  ImageBackground,
+  ImageBackground
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import * as FileSystem from "expo-file-system";
@@ -144,7 +144,7 @@ export default function OSForm() {
 
   return (
     <ImageBackground
-      source={require("./logo.jpg")}
+      source={require("./Metal.jpg")}
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
@@ -157,7 +157,7 @@ export default function OSForm() {
             <View style={styles.modalContainer}>
               <View style={styles.modalBackground}></View>
               <ImageBackground
-                source={require("./logo.jpg")}
+                source={require("./Metal.jpg")}
                 style={styles.backgroundImage}
               >
                 <View style={styles.loginContainer}>
@@ -369,7 +369,7 @@ export default function OSForm() {
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
-    resizeMode: "cover",
+    resizeMode: "cover",    
   },
   container: {
     flex: 1,
