@@ -92,8 +92,8 @@ export default function OSForm() {
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
   const today = new Date();
   const startDate = getFormatedDate(
-    today.setDate(today.getDate() + 1),
-    "DD/MM/YYYY"
+    today.setDate(today.getDate() - 30),
+    "YYYY/MM/DD"
   );
   const [selectedStartDate, setSelectedStartDate] = useState("");
   const [startedDate, setStartedDate] = useState("12/12/2023");
