@@ -17,7 +17,6 @@ import DatePicker from "react-native-modern-datepicker";
 import { getFormatedDate } from "react-native-modern-datepicker";
 import SignatureScreen from "react-native-signature-canvas";
 
-
 const Field = ({ label, value, onChangeText }) => (
   <View>
     <Text style={styles.label}>{label}:</Text>
@@ -58,12 +57,38 @@ export default function OSForm() {
 
   const [isAtendenteModalVisible, setAtendenteModalVisible] = useState(false);
 
-  const atendente = ['Pedro', 'Warley', 'Rafael'];
+  const atendente = ["Pedro", "Warley", "Rafael"];
 
   const selectAtendente = (atendente) => {
     setFormData({ ...formData, atendente });
     setAtendenteModalVisible(false);
   };
+
+  const atendenteModal = (
+    <Modal
+      visible={isAtendenteModalVisible}
+      animationType="slide"
+      transparent={true}
+    >
+      <View style={styles.modalContainer}>
+        <View style={styles.modalBackground}></View>
+        <View style={styles.atendenteModalContent}>
+          <Text style={styles.infOs}>Selecione o atendente</Text>
+          {atendente.map((atendente, index) => (
+            <Button
+              key={index}
+              title={atendente}
+              onPress={() => selectAtendente(atendente)}
+            />
+          ))}
+          <Button
+            title="Close"
+            onPress={() => setAtendenteModalVisible(false)}
+          />
+        </View>
+      </View>
+    </Modal>
+  );
 
   const handleDateFieldFocus = (fieldName, layout) => {
     const position = { top: layout.y + layout.height + 8, left: layout.x };
@@ -242,7 +267,7 @@ export default function OSForm() {
                   style={styles.inputBtn}
                   onPress={handleOnPressStartDate}
                 >
-                  <Text>{selectedStartDate}</Text>
+                  <Text style={{ color: "white" }}>{selectedStartDate}</Text>
                 </TouchableOpacity>
               </View>
 
@@ -283,33 +308,11 @@ export default function OSForm() {
                   style={styles.inputBtn}
                   onPress={() => setAtendenteModalVisible(true)}
                 >
-                  <Text>{formData.atendente}</Text>
+                  <Text style={{ color: "white" }}>{formData.atendente}</Text>
                 </TouchableOpacity>
+                {atendenteModal}
               </View>
-              <Modal
-                transparent={true}
-                visible={isAtendenteModalVisible}
-              >
-                <View style={styles.centeredView}>
-                  <View style={styles.modalView}>
-                    {atendente.map((atendente) => (
-                      <TouchableOpacity
-                        key={atendente}
-                        style={styles.atendenteOption}
-                        onPress={() => selectAtendente(atendente)}
-                      >
-                        <Text>{atendente}</Text>
-                      </TouchableOpacity>
-                    ))}
-                    <TouchableOpacity
-                      style={styles.closeButton}
-                      onPress={() => setAtendenteModalVisible(false)}
-                    >
-                      <Text style={{ color: 'white' }}>Close</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </Modal>
+
               <Field
                 label="Situacao"
                 value={formData.situacao}
@@ -443,10 +446,15 @@ export default function OSForm() {
               </Text>
               <Field
                 label="Assinatura Resp. Metalsoft"
-                value={signature ? "Assinatura Capturada" : "Nenhuma Assinatura"}
-                onChangeText={() => { }}
+                value={
+                  signature ? "Assinatura Capturada" : "Nenhuma Assinatura"
+                }
+                onChangeText={() => {}}
               />
-              <Button title="Responsável Metalsoft Assinar" onPress={openSignatureModal} />
+              <Button
+                title="Responsável Metalsoft Assinar"
+                onPress={openSignatureModal}
+              />
               <Modal
                 animationType="slide"
                 transparent={false}
@@ -466,10 +474,15 @@ export default function OSForm() {
               </Text>
               <Field
                 label="Assinatura Resp. Cliente"
-                value={signature ? "Assinatura Capturada" : "Nenhuma Assinatura"}
-                onChangeText={() => { }}
+                value={
+                  signature ? "Assinatura Capturada" : "Nenhuma Assinatura"
+                }
+                onChangeText={() => {}}
               />
-              <Button title="Responsável Cliente Assinar" onPress={openSignatureModal} />
+              <Button
+                title="Responsável Cliente Assinar"
+                onPress={openSignatureModal}
+              />
               <Modal
                 animationType="slide"
                 transparent={false}
@@ -630,4 +643,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     color: "white",
   },
+  closeButton: {},
 });
