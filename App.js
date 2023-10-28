@@ -15,6 +15,7 @@ import * as FileSystem from "expo-file-system";
 import * as MailComposer from "expo-mail-composer";
 import DatePicker from "react-native-modern-datepicker";
 import { getFormatedDate } from "react-native-modern-datepicker";
+import { Picker } from "@react-native-picker/picker";
 
 const Field = ({ label, value, onChangeText }) => (
   <View>
@@ -75,6 +76,7 @@ export default function OSForm() {
     setFormData({
       ...formData,
       [formData.activeDateField]: formData.dataSelecionada,
+      dataEmissao: startedDate,
       activeDateField: "",
       isCalendarVisible: false,
     });
@@ -219,7 +221,9 @@ export default function OSForm() {
                   style={styles.inputBtn}
                   onPress={handleOnPressStartDate}
                 >
-                  <Text>{selectedStartDate}</Text>
+                  <Text style={{ color: "white", fontWeight: "bold" }}>
+                    {selectedStartDate}
+                  </Text>
                 </TouchableOpacity>
               </View>
 
@@ -444,7 +448,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalBackground: {
-    position: "absolute",
+    position: "cover",
     top: 0,
     left: 0,
     right: 0,
@@ -534,6 +538,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     justifyContent: "center",
     marginTop: 14,
+    color: "white",
   },
   centeredView: {
     flex: 1,

@@ -24,7 +24,8 @@
     "react-native-document-picker": "^9.0.1",
     "react-native-email": "^2.1.0",
     "react-native-fs": "^2.20.0",
-    "react-native-modern-datepicker": "^1.0.0-beta.91"
+    "react-native-modern-datepicker": "^1.0.0-beta.91",
+    "react-native-picker": "^4.3.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
