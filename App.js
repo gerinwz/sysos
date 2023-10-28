@@ -15,7 +15,6 @@ import * as FileSystem from "expo-file-system";
 import * as MailComposer from "expo-mail-composer";
 import DatePicker from "react-native-modern-datepicker";
 import { getFormatedDate } from "react-native-modern-datepicker";
-import { Picker } from "@react-native-picker/picker";
 
 const Field = ({ label, value, onChangeText }) => (
   <View>
