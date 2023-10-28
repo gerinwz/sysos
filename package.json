@@ -14,7 +14,7 @@
     ]
   },
   "dependencies": {
-    "@react-native-picker/picker": "^2.5.1",
+    "@react-native-picker/picker": "github:react-native-picker/picker",
     "expo": "~49.0.13",
     "expo-file-system": "~15.4.4",
     "expo-mail-composer": "~12.3.0",
