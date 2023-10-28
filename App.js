@@ -119,6 +119,38 @@ export default function OSForm() {
     </Modal>
   );
 
+  const [isClienteModalVisible, setClienteModalVisible] = useState(false);
+  const cliente = ["MetalSoft", "Estacio_de_Sá"];
+  const selectCliente = (cliente) => {
+    setFormData({ ...formData, cliente });
+    setClienteModalVisible(false);
+  };
+  const clienteModal = (
+    <Modal
+      visible={isClienteModalVisible}
+      animationType="slide"
+      transparent={true}
+    >
+      <View style={styles.modalView}>
+        <View style={styles.modalBackground}></View>
+        <View style={styles.atendenteModalContent}>
+          <Text style={styles.infOs}>Selecione o cliente</Text>
+          {cliente.map((cliente, index) => (
+            <Button
+              key={index}
+              title={cliente}
+              onPress={() => selectCliente(cliente)}
+            />
+          ))}
+          <Button
+            title="Close"
+            onPress={() => setClienteModalVisible(false)}
+          />
+        </View>
+      </View>
+    </Modal>
+  );
+
   const [isRespTecModalVisible, setRespTecModalVisible] = useState(false);
 
   const responsavelTecnico = ["Pedro", "Warley", "Rafael"];
@@ -381,13 +413,16 @@ export default function OSForm() {
                 </TouchableOpacity>
                 {situacaoModal}
               </View>
-              <Field
-                label="Cliente"
-                value={formData.cliente}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, cliente: text })
-                }
-              />
+              <View>
+                <Text style={styles.label}>Cliente:</Text>
+                <TouchableOpacity
+                  style={styles.inputBtn}
+                  onPress={() => setClienteModalVisible(true)}
+                >
+                  <Text style={{ color: "white" }}>{formData.cliente}</Text>
+                </TouchableOpacity>
+                {clienteModal}
+              </View>
               <View>
                 <Text style={styles.label}>Responsável Tecnico:</Text>
                 <TouchableOpacity
