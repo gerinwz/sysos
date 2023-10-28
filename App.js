@@ -8,13 +8,13 @@ import {
   Button,
   Modal,
   TouchableOpacity,
-  ImageBackground
+  ImageBackground,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import * as FileSystem from "expo-file-system";
 import * as MailComposer from "expo-mail-composer";
-import DatePicker from 'react-native-modern-datepicker';
-import { getFormatedDate} from 'react-native-modern-datepicker';
+import DatePicker from "react-native-modern-datepicker";
+import { getFormatedDate } from "react-native-modern-datepicker";
 
 const Field = ({ label, value, onChangeText }) => (
   <View>
@@ -110,11 +110,14 @@ export default function OSForm() {
       const emailBody = "Corpo do E-mail";
       const recipients = ["rogerinwz@icloud.com"]; // Adicione os destinatários desejados
 
-      const attachment = {
-        uri: fileUri, // Caminho completo do arquivo CSV
-        mimeType: "text/csv",
-        filename: "os_data.csv", // Nome do arquivo no e-mail
-      };
+      const attachments = [fileUri]; // Substitua 'fileUri' pelo caminho do arquivo CSV que você deseja anexar
+
+      await MailComposer.composeAsync({
+        subject: emailSubject,
+        body: emailBody,
+        recipients: recipients,
+        attachments: attachments,
+      });
 
       await MailComposer.composeAsync({
         subject: emailSubject,
@@ -159,7 +162,7 @@ export default function OSForm() {
     setStartedDate(propDate);
   }
 
-  //Função para abrir 
+  //Função para abrir
   const handleOnPressStartDate = () => {
     setOpenStartDatePicker(!openStartDatePicker);
     (date) => setFormData({ ...formData, dataEmissao: date });
@@ -210,47 +213,46 @@ export default function OSForm() {
             <View style={styles.osInfoBackground}>
               <Text style={styles.infOs}>Ordem de Serviço MetalSoft</Text>
               <View>
-              <Text style={styles.label}>Data Emissão:</Text>
-              <TouchableOpacity
-                style={styles.inputBtn}
-                onPress={handleOnPressStartDate}
-              >
-                <Text>{selectedStartDate}</Text>
-              </TouchableOpacity>
-            </View>
-          
-
-          {/* Create modal for date picker */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={openStartDatePicker}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <DatePicker
-                  mode="calendar"
-                  minimumDate={startDate}
-                  selected={startedDate}
-                  onDateChanged={handleChangeStartDate}
-                  onSelectedChange={(date) => setSelectedStartDate(date)}
-                  options={{
-                    backgroundColor: "#080516",
-                    textHeaderColor: "#469ab6",
-                    textDefaultColor: "#FFFFFF",
-                    selectedTextColor: "#FFF",
-                    mainColor: "#469ab6",
-                    textSecondaryColor: "#FFFFFF",
-                    borderColor: "rgba(122, 146, 165, 0.1)",
-                  }}
-                />
-
-                <TouchableOpacity onPress={handleOnPressStartDate}>
-                  <Text style={{ color: "white" }}>Close</Text>
+                <Text style={styles.label}>Data Emissão:</Text>
+                <TouchableOpacity
+                  style={styles.inputBtn}
+                  onPress={handleOnPressStartDate}
+                >
+                  <Text>{selectedStartDate}</Text>
                 </TouchableOpacity>
               </View>
-            </View>
-          </Modal>
+
+              {/* Create modal for date picker */}
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={openStartDatePicker}
+              >
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                    <DatePicker
+                      mode="calendar"
+                      minimumDate={startDate}
+                      selected={startedDate}
+                      onDateChanged={handleChangeStartDate}
+                      onSelectedChange={(date) => setSelectedStartDate(date)}
+                      options={{
+                        backgroundColor: "#080516",
+                        textHeaderColor: "#469ab6",
+                        textDefaultColor: "#FFFFFF",
+                        selectedTextColor: "#FFF",
+                        mainColor: "#469ab6",
+                        textSecondaryColor: "#FFFFFF",
+                        borderColor: "rgba(122, 146, 165, 0.1)",
+                      }}
+                    />
+
+                    <TouchableOpacity onPress={handleOnPressStartDate}>
+                      <Text style={{ color: "white" }}>Close</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </Modal>
               <Field
                 label="Atendente"
                 value={formData.atendente}
@@ -427,7 +429,7 @@ export default function OSForm() {
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
-    resizeMode: "cover",    
+    resizeMode: "cover",
   },
   container: {
     flex: 1,
@@ -451,10 +453,10 @@ const styles = StyleSheet.create({
   loginContainer: {
     flex: 1,
     width: "100%",
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    backgroundColor: "rgba(255, 255, 255, 0.3)", // Torne o fundo do modal mais transparente
     padding: 20,
     borderRadius: 10,
-    margin: "50%",
+    margin: 50, // Isso parece estranho, talvez ajuste
     justifyContent: "center",
     height: 150,
   },
@@ -497,14 +499,14 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: "gray",
+    borderColor: "white", // Aumente o contraste da borda
     borderWidth: 1,
     marginBottom: 16,
     paddingHorizontal: 8,
     color: "white",
   },
   button: {
-    backgroundColor: "white", // Cor de fundo branca para os botões
+    backgroundColor: "#469ab6", // Use uma cor que combine melhor com o estilo
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -525,7 +527,7 @@ const styles = StyleSheet.create({
   inputBtn: {
     borderWidth: 1,
     borderRadius: 4,
-    borderColor: "#222",
+    borderColor: "#469ab6", // Cores mais legíveis
     height: 50,
     paddingLeft: 8,
     fontSize: 18,
