@@ -70,7 +70,7 @@ export default function OSForm() {
       animationType="slide"
       transparent={true}
     >
-      <View style={styles.modalContainer}>
+      <View style={styles.modalView}>
         <View style={styles.modalBackground}></View>
         <View style={styles.atendenteModalContent}>
           <Text style={styles.infOs}>Selecione o atendente</Text>
@@ -84,7 +84,7 @@ export default function OSForm() {
           <Button
             title="Close"
             onPress={() => setAtendenteModalVisible(false)}
-            color="black"
+            color="white"
           />
         </View>
       </View>
@@ -106,7 +106,7 @@ export default function OSForm() {
       animationType="slide"
       transparent={true}
     >
-      <View style={styles.modalContainer}>
+      <View style={styles.modalView}>
         <View style={styles.modalBackground}></View>
         <View style={styles.atendenteModalContent}>
           <Text style={styles.infOs}>Selecione o atendente</Text>
@@ -120,7 +120,43 @@ export default function OSForm() {
           <Button
             title="Close"
             onPress={() => setSituacaoModalVisible(false)}
-            color="black"
+            color="white"
+          />
+        </View>
+      </View>
+    </Modal>
+  );
+
+  const [isRespTecModalVisible, setRespTecModalVisible] = useState(false);
+
+  const responsavelTecnico = ["Pedro", "Warley", "Rafael"];
+
+  const selectRespTec = (responsavelTecnico) => {
+    setFormData({ ...formData, responsavelTecnico });
+    setRespTecModalVisible(false);
+  };
+
+  const responsavelTecnicoModal = (
+    <Modal
+      visible={isRespTecModalVisible}
+      animationType="slide"
+      transparent={true}
+    >
+      <View style={styles.modalView}>
+        <View style={styles.modalBackground}></View>
+        <View style={styles.responsavelTecnicoModalContent}>
+          <Text style={styles.infOs}>Selecione Responsável Técnico</Text>
+          {atendente.map((responsavelTecnico, index) => (
+            <Button
+              key={index}
+              title={responsavelTecnico}
+              onPress={() => selectRespTec(responsavelTecnico)}
+            />
+          ))}
+          <Button
+            title="Close"
+            onPress={() => setRespTecModalVisible(false)}
+            color="white"
           />
         </View>
       </View>
@@ -366,13 +402,17 @@ export default function OSForm() {
                   setFormData({ ...formData, cliente: text })
                 }
               />
-              <Field
-                label="Responsavel Tecnico"
-                value={formData.responsavelTecnico}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, responsavelTecnico: text })
-                }
-              />
+              <View>
+                <Text style={styles.label}>Responsável Tecnico:</Text>
+                <TouchableOpacity
+                  style={styles.inputBtn}
+                  onPress={() => setRespTecModalVisible(true)}
+                >
+                  <Text style={{ color: "white" }}>{formData.responsavelTecnico}</Text>
+                </TouchableOpacity>
+                {responsavelTecnicoModal}
+              </View>
+
 
               <Text style={styles.sectionLabel}>Solicitação Efetuada</Text>
               <TouchableOpacity
@@ -488,7 +528,7 @@ export default function OSForm() {
                 value={
                   signature ? "Assinatura Capturada" : "Nenhuma Assinatura"
                 }
-                onChangeText={() => {}}
+                onChangeText={() => { }}
               />
               <Button
                 title="Responsável Metalsoft Assinar"
@@ -516,7 +556,7 @@ export default function OSForm() {
                 value={
                   signature ? "Assinatura Capturada" : "Nenhuma Assinatura"
                 }
-                onChangeText={() => {}}
+                onChangeText={() => { }}
               />
               <Button
                 title="Responsável Cliente Assinar"
