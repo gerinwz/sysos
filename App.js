@@ -91,6 +91,42 @@ export default function OSForm() {
     </Modal>
   );
 
+  const [isSituacaoModalVisible, setSituacaoModalVisible] = useState(false);
+
+  const situacao = ["Aberto", "Fechado"];
+
+  const selectSituacao = (situacao) => {
+    setFormData({ ...formData, situacao });
+    setSituacaoModalVisible(false);
+  };
+
+  const situacaoModal = (
+    <Modal
+      visible={isSituacaoModalVisible}
+      animationType="slide"
+      transparent={true}
+    >
+      <View style={styles.modalContainer}>
+        <View style={styles.modalBackground}></View>
+        <View style={styles.atendenteModalContent}>
+          <Text style={styles.infOs}>Selecione o atendente</Text>
+          {situacao.map((situacao, index) => (
+            <Button
+              key={index}
+              title={situacao}
+              onPress={() => selectSituacao(situacao)}
+            />
+          ))}
+          <Button
+            title="Close"
+            onPress={() => setSituacaoModalVisible(false)}
+            color="black"
+          />
+        </View>
+      </View>
+    </Modal>
+  );
+
   const handleDateFieldFocus = (fieldName, layout) => {
     const position = { top: layout.y + layout.height + 8, left: layout.x };
     setFormData({
@@ -313,14 +349,16 @@ export default function OSForm() {
                 </TouchableOpacity>
                 {atendenteModal}
               </View>
-
-              <Field
-                label="Situacao"
-                value={formData.situacao}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, situacao: text })
-                }
-              />
+              <View>
+                <Text style={styles.label}>Situação:</Text>
+                <TouchableOpacity
+                  style={styles.inputBtn}
+                  onPress={() => setSituacaoModalVisible(true)}
+                >
+                  <Text style={{ color: "white" }}>{formData.situacao}</Text>
+                </TouchableOpacity>
+                {situacaoModal}
+              </View>
               <Field
                 label="Cliente"
                 value={formData.cliente}
