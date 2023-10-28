@@ -84,6 +84,7 @@ export default function OSForm() {
           <Button
             title="Close"
             onPress={() => setAtendenteModalVisible(false)}
+            color="black"
           />
         </View>
       </View>
@@ -522,6 +523,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 20,
   },
   modalBackground: {
     position: "cover",
@@ -530,6 +532,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+    borderRadius: 20,
   },
   loginContainer: {
     flex: 1,
