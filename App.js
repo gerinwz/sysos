@@ -106,9 +106,10 @@ export default function OSForm() {
       alert(`Arquivo CSV criado com sucesso em: ${fileUri}`);
 
       // Enviar o arquivo CSV por e-mail
-      const emailSubject = "Assunto do E-mail";
-      const emailBody = "Corpo do E-mail";
-      const recipients = ["rogerinwz@icloud.com"]; // Adicione os destinatários desejados
+      const emailSubject = "SysOS -  OS para lançamento";
+      const emailBody =
+        "Segue em anexo arquivo da OS em CSV para inserir no sistema NETi";
+      const recipients = ["pedro@metalsoft.com.br"]; // Adicione os destinatários desejados
 
       const attachments = [fileUri]; // Substitua 'fileUri' pelo caminho do arquivo CSV que você deseja anexar
 
