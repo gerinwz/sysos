@@ -81,7 +81,6 @@ export default function OSForm() {
           <Button
             title="Close"
             onPress={() => setAtendenteModalVisible(false)}
-            color="white"
           />
         </View>
       </View>
@@ -114,7 +113,6 @@ export default function OSForm() {
           <Button
             title="Close"
             onPress={() => setSituacaoModalVisible(false)}
-            color="white"
           />
         </View>
       </View>
@@ -137,7 +135,6 @@ export default function OSForm() {
       transparent={true}
     >
       <View style={styles.modalView}>
-        <View style={styles.modalBackground}></View>
         <View style={styles.responsavelTecnicoModalContent}>
           <Text style={styles.infOs}>Selecione Responsável Técnico</Text>
           {atendente.map((responsavelTecnico, index) => (
@@ -147,11 +144,7 @@ export default function OSForm() {
               onPress={() => selectRespTec(responsavelTecnico)}
             />
           ))}
-          <Button
-            title="Close"
-            onPress={() => setRespTecModalVisible(false)}
-            color="white"
-          />
+          <Button title="Close" onPress={() => setRespTecModalVisible(false)} />
         </View>
       </View>
     </Modal>
@@ -401,11 +394,12 @@ export default function OSForm() {
                   style={styles.inputBtn}
                   onPress={() => setRespTecModalVisible(true)}
                 >
-                  <Text style={{ color: "white" }}>{formData.responsavelTecnico}</Text>
+                  <Text style={{ color: "white" }}>
+                    {formData.responsavelTecnico}
+                  </Text>
                 </TouchableOpacity>
                 {responsavelTecnicoModal}
               </View>
-
 
               <Text style={styles.sectionLabel}>Solicitação Efetuada</Text>
               <TouchableOpacity
@@ -521,7 +515,7 @@ export default function OSForm() {
                 value={
                   signature ? "Assinatura Capturada" : "Nenhuma Assinatura"
                 }
-                onChangeText={() => { }}
+                onChangeText={() => {}}
               />
               <Button
                 title="Responsável Metalsoft Assinar"
@@ -549,7 +543,7 @@ export default function OSForm() {
                 value={
                   signature ? "Assinatura Capturada" : "Nenhuma Assinatura"
                 }
-                onChangeText={() => { }}
+                onChangeText={() => {}}
               />
               <Button
                 title="Responsável Cliente Assinar"
