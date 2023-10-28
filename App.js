@@ -16,6 +16,8 @@ import * as MailComposer from "expo-mail-composer";
 import DatePicker from "react-native-modern-datepicker";
 import { getFormatedDate } from "react-native-modern-datepicker";
 import SignatureScreen from "react-native-signature-canvas";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+//import { useState, useCallback } from "react";
 
 const Field = ({ label, value, onChangeText }) => (
   <View>
@@ -25,6 +27,26 @@ const Field = ({ label, value, onChangeText }) => (
 );
 
 export default function OSForm() {
+  //Usando Hora no campo entrada.
+  const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
+  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+  const showDateTimePicker = () => {
+    setDateTimePickerVisibility(true);
+  };
+  const hideDateTimePicker = () => {
+    setDateTimePickerVisibility(false);
+  };
+  const handleDatePicked = (date) => {
+    hideDateTimePicker();
+    setSelectedDateTime(date);
+    const formattedDate = `${date.getHours()}:${date.getMinutes()}`;
+    setFormData({ ...formData, entrada: formattedDate });
+  };
+
+
+
+
+
   const [formData, setFormData] = useState({
     dataEmissao: "",
     atendente: "",
@@ -67,7 +89,7 @@ export default function OSForm() {
       animationType="slide"
       transparent={true}
     >
-      <View style={styles.modalView}>
+      <View style={styles.atendenteOption}>
         <View style={styles.modalBackground}></View>
         <View style={styles.atendenteModalContent}>
           <Text style={styles.infOs}>Selecione o atendente</Text>
@@ -150,7 +172,7 @@ export default function OSForm() {
           <Button
             title="Close"
             onPress={() => setRespTecModalVisible(false)}
-            color="white"
+          //color="white" //No android se colocar
           />
         </View>
       </View>
@@ -436,13 +458,18 @@ export default function OSForm() {
               <Text style={styles.sectionLabel}>
                 Quadro de Horários Cliente
               </Text>
-              <Field
-                label="Entrada"
-                value={formData.entradaCliente}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, entradaCliente: text })
-                }
+              <Text style={styles.label}>Entrada:</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.entrada}
+                onChangeText={(text) => setFormData({ ...formData, entrada: text })}
+              /><DateTimePickerModal
+                isVisible={isDateTimePickerVisible}
+                mode="time"
+                onConfirm={handleDatePicked}
+                onCancel={hideDateTimePicker}
               />
+              <Button title="Escolher Hora" onPress={showDateTimePicker} />
               <Field
                 label="Início Almoço"
                 value={formData.inicioAlmocoCliente}
@@ -716,6 +743,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     color: "white",
+    backgroundColor: "#080516",
   },
   closeButton: {},
 });
