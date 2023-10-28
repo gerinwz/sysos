@@ -56,14 +56,11 @@ export default function OSForm() {
   });
 
   const [isAtendenteModalVisible, setAtendenteModalVisible] = useState(false);
-
   const atendente = ["Pedro", "Warley", "Rafael"];
-
   const selectAtendente = (atendente) => {
     setFormData({ ...formData, atendente });
     setAtendenteModalVisible(false);
   };
-
   const atendenteModal = (
     <Modal
       visible={isAtendenteModalVisible}
@@ -92,14 +89,11 @@ export default function OSForm() {
   );
 
   const [isSituacaoModalVisible, setSituacaoModalVisible] = useState(false);
-
   const situacao = ["Aberto", "Fechado"];
-
   const selectSituacao = (situacao) => {
     setFormData({ ...formData, situacao });
     setSituacaoModalVisible(false);
   };
-
   const situacaoModal = (
     <Modal
       visible={isSituacaoModalVisible}
@@ -136,7 +130,6 @@ export default function OSForm() {
       calendarPosition: position,
     });
   };
-
   const handleDateSelect = (date) =>
     setFormData({ ...formData, dataSelecionada: date.dateString });
   const [modalVisible, setModalVisible] = useState(true);
