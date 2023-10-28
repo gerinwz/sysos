@@ -17,6 +17,7 @@ import DatePicker from "react-native-modern-datepicker";
 import { getFormatedDate } from "react-native-modern-datepicker";
 import SignatureScreen from "react-native-signature-canvas";
 
+
 const Field = ({ label, value, onChangeText }) => (
   <View>
     <Text style={styles.label}>{label}:</Text>
@@ -54,6 +55,15 @@ export default function OSForm() {
     isCalendarVisible: false,
     calendarPosition: {},
   });
+
+  const [isAtendenteModalVisible, setAtendenteModalVisible] = useState(false);
+
+  const atendente = ['Pedro', 'Warley', 'Rafael'];
+
+  const selectAtendente = (atendente) => {
+    setFormData({ ...formData, atendente });
+    setAtendenteModalVisible(false);
+  };
 
   const handleDateFieldFocus = (fieldName, layout) => {
     const position = { top: layout.y + layout.height + 8, left: layout.x };
@@ -267,13 +277,39 @@ export default function OSForm() {
                   </View>
                 </View>
               </Modal>
-              <Field
-                label="Atendente"
-                value={formData.atendente}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, atendente: text })
-                }
-              />
+              <View>
+                <Text style={styles.label}>Atendente:</Text>
+                <TouchableOpacity
+                  style={styles.inputBtn}
+                  onPress={() => setAtendenteModalVisible(true)}
+                >
+                  <Text>{formData.atendente}</Text>
+                </TouchableOpacity>
+              </View>
+              <Modal
+                transparent={true}
+                visible={isAtendenteModalVisible}
+              >
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                    {atendente.map((atendente) => (
+                      <TouchableOpacity
+                        key={atendente}
+                        style={styles.atendenteOption}
+                        onPress={() => selectAtendente(atendente)}
+                      >
+                        <Text>{atendente}</Text>
+                      </TouchableOpacity>
+                    ))}
+                    <TouchableOpacity
+                      style={styles.closeButton}
+                      onPress={() => setAtendenteModalVisible(false)}
+                    >
+                      <Text style={{ color: 'white' }}>Close</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </Modal>
               <Field
                 label="Situacao"
                 value={formData.situacao}
@@ -587,5 +623,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  atendenteOption: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    color: "white",
   },
 });
