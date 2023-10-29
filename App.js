@@ -1,3 +1,5 @@
+//Main
+
 import React, { useState } from "react";
 import {
   View,
@@ -57,7 +59,8 @@ export default function OSForm() {
   });
 
   //Usando Hora no campo entrada.
-  const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
+  const [isDateTimePickerVisible, setDateTimePickerVisibility] =
+    useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState(new Date());
   const showDateTimePicker = () => {
     setDateTimePickerVisibility(true);
@@ -73,8 +76,11 @@ export default function OSForm() {
   };
 
   //Usando Hora no campo Início Almoço.
-  const [isLunchStartPickerVisible, setLunchStartPickerVisibility] = useState(false);
-  const [selectedLunchStartTime, setSelectedLunchStartTime] = useState(new Date());
+  const [isLunchStartPickerVisible, setLunchStartPickerVisibility] =
+    useState(false);
+  const [selectedLunchStartTime, setSelectedLunchStartTime] = useState(
+    new Date()
+  );
   const showLunchStartTimePicker = () => {
     setLunchStartPickerVisibility(true);
   };
@@ -89,7 +95,6 @@ export default function OSForm() {
     const formattedTime = `${date.getHours()}:${date.getMinutes()}`;
     setFormData({ ...formData, inicioAlmocoCliente: formattedTime });
   };
-
 
   //Selecionar Atendente 'atendente'
   const [isAtendenteModalVisible, setAtendenteModalVisible] = useState(false);
@@ -385,8 +390,8 @@ export default function OSForm() {
               </ImageBackground>
             </View>
           </Modal>
-          //FIM LOGIN
         ) : (
+          //FIM LOGIN
           //Inicio Ordem de serviço
           <ScrollView style={styles.appBorder}>
             <View style={styles.osInfoBackground}>
@@ -509,7 +514,9 @@ export default function OSForm() {
               <TextInput
                 style={styles.input}
                 value={formData.entrada}
-                onChangeText={(text) => setFormData({ ...formData, entrada: text })}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, entrada: text })
+                }
               />
               <DateTimePickerModal
                 isVisible={isDateTimePickerVisible}
@@ -522,7 +529,9 @@ export default function OSForm() {
               <TextInput
                 style={styles.input}
                 value={formData.inicioAlmocoCliente}
-                onChangeText={(text) => setFormData({ ...formData, inicioAlmocoCliente: text })}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, inicioAlmocoCliente: text })
+                }
               />
               <DateTimePickerModal
                 isVisible={isLunchStartPickerVisible}
@@ -530,7 +539,10 @@ export default function OSForm() {
                 onConfirm={handleLunchStartTimePicked}
                 onCancel={hideLunchStartTimePicker}
               />
-              <Button title="Escolher Hora" onPress={showLunchStartTimePicker} />
+              <Button
+                title="Escolher Hora"
+                onPress={showLunchStartTimePicker}
+              />
               <Field
                 label="Fim Almoço"
                 value={formData.fimAlmocoCliente}
@@ -605,7 +617,7 @@ export default function OSForm() {
                 value={
                   signature ? "Assinatura Capturada" : "Nenhuma Assinatura"
                 }
-                onChangeText={() => { }}
+                onChangeText={() => {}}
               />
               <Button
                 title="Responsável Metalsoft Assinar"
@@ -633,7 +645,7 @@ export default function OSForm() {
                 value={
                   signature ? "Assinatura Capturada" : "Nenhuma Assinatura"
                 }
-                onChangeText={() => { }}
+                onChangeText={() => {}}
               />
               <Button
                 title="Responsável Cliente Assinar"
