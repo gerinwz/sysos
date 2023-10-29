@@ -275,7 +275,38 @@ export default function OSForm() {
     setOpenStartDatePicker(!openStartDatePicker);
     (date) => setFormData({ ...formData, dataEmissao: date });
   };
-
+  //FUNCÇAO TRANSPORTE transporte
+  const [isTransporteModalVisible, setTransporteModalVisible] = useState(false);
+  const transporte = ["Locado", "Proprio", "Onibus", "Aereo"];
+  const selectTransporte = (transporte) => {
+    setFormData({ ...formData, transporte });
+    setTransporteModalVisible(false);
+  };
+  const transporteModal = (
+    <Modal
+      visible={isTransporteModalVisible}
+      animationType="slide"
+      transparent={true}
+    >
+      <View style={styles.modalView}>
+        <View style={styles.modalBackground}></View>
+        <View style={styles.transporteModalContent}>
+          <Text style={styles.infOs}>Selecione o Transporte</Text>
+          {transporte.map((transporte, index) => (
+            <Button
+              key={index}
+              title={transporte}
+              onPress={() => selectTransporte(transporte)}
+            />
+          ))}
+          <Button
+            title="Close"
+            onPress={() => setTransporteModalVisible(false)}
+          />
+        </View>
+      </View>
+    </Modal>
+  );
   return (
     <ImageBackground
       source={require("./Metal.jpg")}
@@ -484,13 +515,16 @@ export default function OSForm() {
               />
 
               <Text style={styles.sectionLabel}>Outras Informações</Text>
-              <Field
-                label="Transporte"
-                value={formData.transporte}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, transporte: text })
-                }
-              />
+              <View>
+                <Text style={styles.label}>Transporte:</Text>
+                <TouchableOpacity
+                  style={styles.inputBtn}
+                  onPress={() => setTransporteModalVisible(true)}
+                >
+                  <Text style={{ color: "white" }}>{formData.transporte}</Text>
+                </TouchableOpacity>
+                {transporteModal}
+              </View>
               <Field
                 label="Outros"
                 value={formData.outros}
