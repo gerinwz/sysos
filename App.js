@@ -56,45 +56,24 @@ export default function OSForm() {
     isCalendarVisible: false,
     calendarPosition: {},
   });
-
-  //Usando Hora no campo entrada.
-  const [isDateTimePickerVisible, setDateTimePickerVisibility] =
-    useState(false);
-  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
-  const showDateTimePicker = () => {
-    setDateTimePickerVisibility(true);
-  };
-  const hideDateTimePicker = () => {
-    setDateTimePickerVisibility(false);
-  };
-  const handleDatePicked = (date) => {
-    hideDateTimePicker();
-    setSelectedDateTime(date);
-    const formattedDate = `${date.getHours()}:${date.getMinutes()}`;
-    setFormData({ ...formData, entrada: formattedDate });
-  };
-
-  //Usando Hora no campo Início Almoço.
-  const [isLunchStartPickerVisible, setLunchStartPickerVisibility] =
-    useState(false);
-  const [selectedLunchStartTime, setSelectedLunchStartTime] = useState(
-    new Date()
+  //DATA //Constante para abrir o Modal
+  const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
+  const today = new Date();
+  const startDate = getFormatedDate(
+    today.setDate(today.getDate() - 30),
+    "YYYY/MM/DD"
   );
-  const showLunchStartTimePicker = () => {
-    setLunchStartPickerVisibility(true);
-  };
+  const [selectedStartDate, setSelectedStartDate] = useState("");
+  const [startedDate, setStartedDate] = useState("12/12/2023");
+  function handleChangeStartDate(propDate) {
+    setStartedDate(propDate);
+  }
 
-  const hideLunchStartTimePicker = () => {
-    setLunchStartPickerVisibility(false);
+  //Função para abrir
+  const handleOnPressStartDate = () => {
+    setOpenStartDatePicker(!openStartDatePicker);
+    (date) => setFormData({ ...formData, dataEmissao: date });
   };
-
-  const handleLunchStartTimePicked = (date) => {
-    hideLunchStartTimePicker();
-    setSelectedLunchStartTime(date);
-    const formattedTime = `${date.getHours()}:${date.getMinutes()}`;
-    setFormData({ ...formData, inicioAlmocoCliente: formattedTime });
-  };
-
   //Selecionar Atendente 'atendente'
   const [isAtendenteModalVisible, setAtendenteModalVisible] = useState(false);
   const atendente = ["Pedro", "Warley", "Rafael"];
@@ -196,7 +175,6 @@ export default function OSForm() {
     setFormData({ ...formData, responsavelTecnico });
     setRespTecModalVisible(false);
   };
-
   const responsavelTecnicoModal = (
     <Modal
       visible={isRespTecModalVisible}
@@ -245,7 +223,7 @@ export default function OSForm() {
       isCalendarVisible: false,
     });
   };
-
+  // CRIAR CSV e anexar ao EMAIL
   const createCSV = async () => {
     try {
       const csvData = [
@@ -324,24 +302,77 @@ export default function OSForm() {
     setLoggedIn(false);
     setModalVisible(true);
   };
-
-  //DATA //Constante para abrir o Modal
-  const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
-  const today = new Date();
-  const startDate = getFormatedDate(
-    today.setDate(today.getDate() - 30),
-    "YYYY/MM/DD"
+  //Responsavel pelo serviço 'responsavelServicos'
+  const [
+    isResponsavelServicosModalVisible,
+    setResponsavelServicosModalVisible,
+  ] = useState(false);
+  const responsavelServicos = ["Pedro", "Warley", "Rafael"];
+  const selectResponsavelServicos = (responsavelServicos) => {
+    setFormData({ ...formData, responsavelServicos });
+    setResponsavelServicosModalVisible(false);
+  };
+  const responsavelServicosModal = (
+    <Modal
+      visible={isResponsavelServicosModalVisible}
+      animationType="slide"
+      transparent={true}
+    >
+      <View style={styles.modalView}>
+        <View style={styles.modalBackground}></View>
+        <View style={styles.responsavelServicosModalContent}>
+          <Text style={styles.infOs}>Selecione o responsavel pelo serviço</Text>
+          {responsavelServicos.map((responsavelServicos, index) => (
+            <Button
+              key={index}
+              title={responsavelServicos}
+              onPress={() => selectResponsavelServicos(responsavelServicos)}
+            />
+          ))}
+          <Button
+            title="Close"
+            onPress={() => setResponsavelServicosModalVisible(false)}
+          />
+        </View>
+      </View>
+    </Modal>
   );
-  const [selectedStartDate, setSelectedStartDate] = useState("");
-  const [startedDate, setStartedDate] = useState("12/12/2023");
-  function handleChangeStartDate(propDate) {
-    setStartedDate(propDate);
-  }
+  //Usando Hora no campo entrada.
+  const [isDateTimePickerVisible, setDateTimePickerVisibility] =
+    useState(false);
+  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+  const showDateTimePicker = () => {
+    setDateTimePickerVisibility(true);
+  };
+  const hideDateTimePicker = () => {
+    setDateTimePickerVisibility(false);
+  };
+  const handleDatePicked = (date) => {
+    hideDateTimePicker();
+    setSelectedDateTime(date);
+    const formattedDate = `${date.getHours()}:${date.getMinutes()}`;
+    setFormData({ ...formData, entrada: formattedDate });
+  };
 
-  //Função para abrir
-  const handleOnPressStartDate = () => {
-    setOpenStartDatePicker(!openStartDatePicker);
-    (date) => setFormData({ ...formData, dataEmissao: date });
+  //Usando Hora no campo Início Almoço.
+  const [isLunchStartPickerVisible, setLunchStartPickerVisibility] =
+    useState(false);
+  const [selectedLunchStartTime, setSelectedLunchStartTime] = useState(
+    new Date()
+  );
+  const showLunchStartTimePicker = () => {
+    setLunchStartPickerVisibility(true);
+  };
+
+  const hideLunchStartTimePicker = () => {
+    setLunchStartPickerVisibility(false);
+  };
+
+  const handleLunchStartTimePicked = (date) => {
+    hideLunchStartTimePicker();
+    setSelectedLunchStartTime(date);
+    const formattedTime = `${date.getHours()}:${date.getMinutes()}`;
+    setFormData({ ...formData, inicioAlmocoCliente: formattedTime });
   };
   //TIPO DE SERVIÇO 'tipoServico'
   const [isTipoServicoModalVisible, setTipoServicoModalVisible] =
@@ -629,14 +660,20 @@ export default function OSForm() {
                 }
                 multiline
               />
-              <Field
-                label="Responsável"
-                value={formData.responsavelServicos}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, responsavelServicos: text })
-                }
-              />
-
+              {/* RESPONSAVEL */}
+              <View>
+                <Text style={styles.label}>Responsavel:</Text>
+                <TouchableOpacity
+                  style={styles.inputBtn}
+                  onPress={() => setResponsavelServicosModalVisible(true)}
+                >
+                  <Text style={{ color: "white" }}>
+                    {formData.responsavelServicos}
+                  </Text>
+                </TouchableOpacity>
+                {responsavelServicosModal}
+              </View>
+              {/* RESPONSAVEL */}
               <View>
                 <Text style={styles.label}>Tipo de Serviço:</Text>
                 <TouchableOpacity
