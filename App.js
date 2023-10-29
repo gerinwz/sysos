@@ -1,5 +1,4 @@
 //Main
-
 import React, { useState } from "react";
 import {
   View,
@@ -326,8 +325,7 @@ export default function OSForm() {
     setModalVisible(true);
   };
 
-  //DATA
-  //Constante para abrir o Modal
+  //DATA //Constante para abrir o Modal
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
   const today = new Date();
   const startDate = getFormatedDate(
