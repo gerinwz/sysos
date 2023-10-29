@@ -161,7 +161,35 @@ export default function OSForm() {
       </View>
     </Modal>
   );
-
+  //CLIENTE
+  const [isClienteModalVisible, setClienteModalVisible] = useState(false);
+  const cliente = ["MetalSoft", "Estacio_de_Sá"];
+  const selectCliente = (cliente) => {
+    setFormData({ ...formData, cliente });
+    setClienteModalVisible(false);
+  };
+  const clienteModal = (
+    <Modal
+      visible={isClienteModalVisible}
+      animationType="slide"
+      transparent={true}
+    >
+      <View style={styles.modalView}>
+        <View style={styles.modalBackground}></View>
+        <View style={styles.atendenteModalContent}>
+          <Text style={styles.infOs}>Selecione o cliente</Text>
+          {cliente.map((cliente, index) => (
+            <Button
+              key={index}
+              title={cliente}
+              onPress={() => selectCliente(cliente)}
+            />
+          ))}
+          <Button title="Close" onPress={() => setClienteModalVisible(false)} />
+        </View>
+      </View>
+    </Modal>
+  );
   //Responsavel Tecnico 'responsavelTecnico'
   const [isRespTecModalVisible, setRespTecModalVisible] = useState(false);
   const responsavelTecnico = ["Pedro", "Warley", "Rafael"];
@@ -317,6 +345,8 @@ export default function OSForm() {
     setOpenStartDatePicker(!openStartDatePicker);
     (date) => setFormData({ ...formData, dataEmissao: date });
   };
+  //TIPO DE SERVIÇO 'tipoServico'
+
   //FUNCÇAO TRANSPORTE 'transporte'
   const [isTransporteModalVisible, setTransporteModalVisible] = useState(false);
   const transporte = ["Locado", "Proprio", "Onibus", "Aereo"];
@@ -461,13 +491,18 @@ export default function OSForm() {
                 {situacaoModal}
               </View>
               {/*FIM SITUAÇÃO*/}
-              <Field
-                label="Cliente"
-                value={formData.cliente}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, cliente: text })
-                }
-              />
+              {/*CLIENTE*/}
+              <View>
+                <Text style={styles.label}>Cliente:</Text>
+                <TouchableOpacity
+                  style={styles.inputBtn}
+                  onPress={() => setClienteModalVisible(true)}
+                >
+                  <Text style={{ color: "white" }}>{formData.cliente}</Text>
+                </TouchableOpacity>
+                {clienteModal}
+              </View>
+              {/*FIM CLIENTE*/}
               <View>
                 <Text style={styles.label}>Responsável Tecnico:</Text>
                 <TouchableOpacity
