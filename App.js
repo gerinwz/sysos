@@ -15,7 +15,7 @@ import { Calendar } from "react-native-calendars";
 import * as FileSystem from "expo-file-system";
 import * as MailComposer from "expo-mail-composer";
 import SignatureScreen from "react-native-signature-canvas";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const Field = ({ label, value, onChangeText }) => (
   <View>
@@ -321,19 +321,21 @@ export default function OSForm() {
       </View>
     </Modal>
   );
-  //HORA ENTRADA
-  const openEntradaClientePicker = () => {
-    setFormData({ ...formData, isEntradaClientePickerVisible: true });
+  //HORA ENTRADA CLIENTE
+  const openEntradaClienteTimePicker = () => {
+    setFormData({ ...formData, isTimePickerVisible: true });
   };
+  const [isTimePickerModalVisible, setTimePickerModalVisible] = useState(false);
+  const [selectedEntradaClienteTime, setSelectedEntradaClienteTime] = useState(new Date());
 
-  const hideEntradaClientePicker = () => {
-    setFormData({ ...formData, isEntradaClientePickerVisible: false });
-  };
 
-  const handleEntradaClienteTimePicked = (date) => {
-    hideEntradaClientePicker();
-    const formattedTime = `${date.getHours()}:${date.getMinutes()}`;
-    setFormData({ ...formData, entradaCliente: formattedTime });
+  const handleTimeChange = (event, selectedTime) => {
+    if (selectedTime) {
+      const formattedTime = selectedTime.toLocaleTimeString();
+      setFormData({ ...formData, entradaCliente: formattedTime, isTimePickerVisible: false });
+    } else {
+      setFormData({ ...formData, isTimePickerVisible: false });
+    }
   };
 
   //TIPO DE SERVIÇO 'tipoServico'
@@ -564,7 +566,7 @@ export default function OSForm() {
               <Text style={styles.sectionLabel}>
                 Cliente
               </Text>
-              {/* Hora Entrada Cliente*/}
+              {/* Hora Entrada Cliente */}
               <View>
                 <Text style={styles.label}>Entrada Cliente:</Text>
                 <TextInput
@@ -572,15 +574,34 @@ export default function OSForm() {
                   value={formData.entradaCliente}
                   editable={false}
                 />
-                <Button title="Escolher Hora" onPress={openEntradaClientePicker} />
-                <DateTimePickerModal
-                  isVisible={formData.isEntradaClientePickerVisible}
-                  mode="time"
-                  onConfirm={handleEntradaClienteTimePicked}
-                  onCancel={hideEntradaClientePicker}
-                />
+                <Button title="Escolher Hora" onPress={() => setTimePickerModalVisible(true)} />
               </View>
-              {/* Fim Entrada Cliente*/}
+
+              {/* Modal do Seletor de Hora */}
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isTimePickerModalVisible}
+              >
+                <View style={styles.timePickerContainer}>
+                  <DateTimePicker
+                    value={selectedEntradaClienteTime} // Use a variável de estado para definir o valor
+                    mode="time"
+                    is24Hour={true}
+                    display="clock"
+                    onChange={(event, selectedTime) => {
+                      if (event.type === 'set') {
+                        // Atualize a variável de estado e o estado formData com a hora selecionada
+                        setSelectedEntradaClienteTime(selectedTime);
+                        const formattedTime = `${selectedTime.getHours()}:${selectedTime.getMinutes()}`;
+                        setFormData({ ...formData, entradaCliente: formattedTime });
+                      }
+                    }}
+                  />
+                  <Button title="Confirmar" onPress={() => setTimePickerModalVisible(false)} />
+                </View>
+              </Modal>
+              {/* Fim Entrada Cliente */}
               <Field
                 label="Início Almoço"
                 value={formData.fimAlmocoCliente}
@@ -867,6 +888,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     color: "white",
+  },
+  timePickerContainer: {
+    backgroundColor: 'white',
+    alignItems: "center",
+    marginTop: 300,
+    padding: 80,
+    borderRadius: 20,
   },
   closeButton: {},
 });
