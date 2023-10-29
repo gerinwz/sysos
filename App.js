@@ -14,8 +14,6 @@ import {
 import { Calendar } from "react-native-calendars";
 import * as FileSystem from "expo-file-system";
 import * as MailComposer from "expo-mail-composer";
-import DatePicker from "react-native-modern-datepicker";
-import { getFormatedDate } from "react-native-modern-datepicker";
 import SignatureScreen from "react-native-signature-canvas";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -54,16 +52,23 @@ export default function OSForm() {
     dataSelecionada: "",
     activeDateField: "",
     isCalendarVisible: false,
+    selectedDateField: null,
+    isEntradaClientePickerVisible: false,
     calendarPosition: {},
   });
   // Função para abrir o modal de calendário
-  const openCalendarModal = () => {
-    setFormData({ ...formData, isCalendarVisible: true })
+  const openCalendarModal = (field) => {
+    setFormData({ ...formData, isCalendarVisible: true, selectedDateField: field });
   };
 
   const handleDateSelect = (date) => {
-    setFormData({ ...formData, dataEmissao: date.dateString });
-    setFormData({ ...formData, isCalendarVisible: false });
+    const updatedField = formData.selectedDateField;
+    setFormData({
+      ...formData,
+      [updatedField]: date.dateString,
+      isCalendarVisible: false,
+      selectedDateField: null,
+    });
   };
 
   //Selecionar Atendente 'atendente'
@@ -316,43 +321,21 @@ export default function OSForm() {
       </View>
     </Modal>
   );
-  //Usando Hora no campo entrada.
-  const [isDateTimePickerVisible, setDateTimePickerVisibility] =
-    useState(false);
-  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
-  const showDateTimePicker = () => {
-    setDateTimePickerVisibility(true);
-  };
-  const hideDateTimePicker = () => {
-    setDateTimePickerVisibility(false);
-  };
-  const handleDatePicked = (date) => {
-    hideDateTimePicker();
-    setSelectedDateTime(date);
-    const formattedDate = `${date.getHours()}:${date.getMinutes()}`;
-    setFormData({ ...formData, entradaCliente: formattedDate });
+  //HORA ENTRADA
+  const openEntradaClientePicker = () => {
+    setFormData({ ...formData, isEntradaClientePickerVisible: true });
   };
 
-  //Usando Hora no campo Início Almoço.
-  const [isLunchStartPickerVisible, setLunchStartPickerVisibility] =
-    useState(false);
-  const [selectedLunchStartTime, setSelectedLunchStartTime] = useState(
-    new Date()
-  );
-  const showLunchStartTimePicker = () => {
-    setLunchStartPickerVisibility(true);
+  const hideEntradaClientePicker = () => {
+    setFormData({ ...formData, isEntradaClientePickerVisible: false });
   };
 
-  const hideLunchStartTimePicker = () => {
-    setLunchStartPickerVisibility(false);
-  };
-
-  const handleLunchStartTimePicked = (date) => {
-    hideLunchStartTimePicker();
-    setSelectedLunchStartTime(date);
+  const handleEntradaClienteTimePicked = (date) => {
+    hideEntradaClientePicker();
     const formattedTime = `${date.getHours()}:${date.getMinutes()}`;
-    setFormData({ ...formData, inicioAlmocoCliente: formattedTime });
+    setFormData({ ...formData, entradaCliente: formattedTime });
   };
+
   //TIPO DE SERVIÇO 'tipoServico'
   const [isTipoServicoModalVisible, setTipoServicoModalVisible] =
     useState(false);
@@ -477,7 +460,10 @@ export default function OSForm() {
                 onChangeText={(text) => setFormData({ ...formData, dataEmissao: text })}
                 multiline
               />
-              <Button title="Selecionar Data" onPress={openCalendarModal} />
+              <Button
+                title="Selecionar Data"
+                onPress={() => openCalendarModal("dataEmissao")} // Passe o campo correspondente
+              />
               <Modal
                 animationType="slide"
                 transparent={false}
@@ -485,22 +471,15 @@ export default function OSForm() {
               >
                 <View style={styles.modalContainer}>
                   <Calendar
-                    onDayPress={(date) => {
-                      setFormData({
-                        ...formData,
-                        dataEmissao: date.dateString,
-                        isCalendarVisible: false,
-                      });
-                    }}
+                    onDayPress={(date) => handleDateSelect(date)} // Use a função atualizada
                   />
                   <Button
                     title="Fechar"
-                    onPress={() => setFormData({ ...formData, isCalendarVisible: false })}
+                    onPress={() => setFormData({ ...formData, isCalendarVisible: false, selectedDateField: null })}
                   />
                 </View>
               </Modal>
               {/*FIM DATA EMISSÃO*/}
-
               {/*ATENDENTE*/}
               <View>
                 <Text style={styles.label}>Atendente:</Text>
@@ -585,38 +564,29 @@ export default function OSForm() {
               <Text style={styles.sectionLabel}>
                 Cliente
               </Text>
-              <Text style={styles.label}>Entrada:</Text>
-              <TextInput
-                style={styles.input}
-                value={formData.entradaCliente}
+              {/* Hora Início almoço*/}
+              <View>
+                <Text style={styles.label}>Entrada Almoço:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.entradaCliente}
+                  editable={false}
+                />
+                <Button title="Escolher Hora" onPress={openEntradaClientePicker} />
+                <DateTimePickerModal
+                  isVisible={formData.isEntradaClientePickerVisible}
+                  mode="time"
+                  onConfirm={handleEntradaClienteTimePicked}
+                  onCancel={hideEntradaClientePicker}
+                />
+              </View>
+              {/* Fim Hora Início almoço*/}
+              <Field
+                label="Início Almoço"
+                value={formData.fimAlmocoCliente}
                 onChangeText={(text) =>
-                  setFormData({ ...formData, entradaCliente: text })
+                  setFormData({ ...formData, fimAlmocoCliente: text })
                 }
-              />
-              <DateTimePickerModal
-                isVisible={isDateTimePickerVisible}
-                mode="time"
-                onConfirm={handleDatePicked}
-                onCancel={hideDateTimePicker}
-              />
-              <Button title="Escolher Hora" onPress={showDateTimePicker} />
-              <Text style={styles.label}>Início Almoço:</Text>
-              <TextInput
-                style={styles.input}
-                value={formData.inicioAlmocoCliente}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, inicioAlmocoCliente: text })
-                }
-              />
-              <DateTimePickerModal
-                isVisible={isLunchStartPickerVisible}
-                mode="time"
-                onConfirm={handleLunchStartTimePicked}
-                onCancel={hideLunchStartTimePicker}
-              />
-              <Button
-                title="Escolher Hora"
-                onPress={showLunchStartTimePicker}
               />
               <Field
                 label="Fim Almoço"
