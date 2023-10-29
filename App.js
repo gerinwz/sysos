@@ -189,7 +189,7 @@ export default function OSForm() {
       </View>
     </Modal>
   );
-  //Responsavel Tecnico 'responsavelTecnico'
+  //Responsavel Tecnico
   const [isRespTecModalVisible, setRespTecModalVisible] = useState(false);
   const responsavelTecnico = ["Pedro", "Warley", "Rafael"];
   const selectRespTec = (responsavelTecnico) => {
@@ -344,7 +344,43 @@ export default function OSForm() {
     (date) => setFormData({ ...formData, dataEmissao: date });
   };
   //TIPO DE SERVIÇO 'tipoServico'
-
+  const [isTipoServicoModalVisible, setTipoServicoModalVisible] =
+    useState(false);
+  const tipoServico = [
+    "A disposição",
+    "Analise de sistemas",
+    " Implantação ",
+    "Visita Tecnica",
+  ];
+  const selectTpoServico = (tipoServico) => {
+    setFormData({ ...formData, tipoServico });
+    setTipoServicoModalVisible(false);
+  };
+  const tipoServicoModal = (
+    <Modal
+      visible={isTipoServicoModalVisible}
+      animationType="slide"
+      transparent={true}
+    >
+      <View style={styles.modalView}>
+        <View style={styles.modalBackground}></View>
+        <View style={styles.tipoServicoModalContent}>
+          <Text style={styles.infOs}>Selecione o Tipo de serviço</Text>
+          {tipoServico.map((tipoServico, index) => (
+            <Button
+              key={index}
+              title={tipoServico}
+              onPress={() => selectTpoServico(tipoServico)}
+            />
+          ))}
+          <Button
+            title="Close"
+            onPress={() => setTipoServicoModalVisible(false)}
+          />
+        </View>
+      </View>
+    </Modal>
+  );
   //FUNCÇAO TRANSPORTE 'transporte'
   const [isTransporteModalVisible, setTransporteModalVisible] = useState(false);
   const transporte = ["Locado", "Proprio", "Onibus", "Aereo"];
@@ -501,6 +537,7 @@ export default function OSForm() {
                 {clienteModal}
               </View>
               {/*FIM CLIENTE*/}
+              {/*RESPONSAVEL TECNICO*/}
               <View>
                 <Text style={styles.label}>Responsável Tecnico:</Text>
                 <TouchableOpacity
@@ -607,13 +644,17 @@ export default function OSForm() {
                   setFormData({ ...formData, responsavelServicos: text })
                 }
               />
-              <Field
-                label="Tipo de Serviço"
-                value={formData.tipoServico}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, tipoServico: text })
-                }
-              />
+
+              <View>
+                <Text style={styles.label}>Tipo de Serviço:</Text>
+                <TouchableOpacity
+                  style={styles.inputBtn}
+                  onPress={() => setTipoServicoModalVisible(true)}
+                >
+                  <Text style={{ color: "white" }}>{formData.tipoServico}</Text>
+                </TouchableOpacity>
+                {tipoServicoModal}
+              </View>
 
               <Text style={styles.sectionLabel}>Outras Informações</Text>
               <View>
