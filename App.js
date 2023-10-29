@@ -564,9 +564,9 @@ export default function OSForm() {
               <Text style={styles.sectionLabel}>
                 Cliente
               </Text>
-              {/* Hora Início almoço*/}
+              {/* Hora Entrada Cliente*/}
               <View>
-                <Text style={styles.label}>Entrada Almoço:</Text>
+                <Text style={styles.label}>Entrada Cliente:</Text>
                 <TextInput
                   style={styles.input}
                   value={formData.entradaCliente}
@@ -580,7 +580,7 @@ export default function OSForm() {
                   onCancel={hideEntradaClientePicker}
                 />
               </View>
-              {/* Fim Hora Início almoço*/}
+              {/* Fim Entrada Cliente*/}
               <Field
                 label="Início Almoço"
                 value={formData.fimAlmocoCliente}
