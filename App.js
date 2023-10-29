@@ -54,7 +54,7 @@ export default function OSForm() {
     isCalendarVisible: false,
     calendarPosition: {},
   });
-
+  //Selecionar Atendente 'atendente'
   const [isAtendenteModalVisible, setAtendenteModalVisible] = useState(false);
   const atendente = ["Pedro", "Warley", "Rafael"];
   const selectAtendente = (atendente) => {
@@ -86,7 +86,7 @@ export default function OSForm() {
       </View>
     </Modal>
   );
-
+  //Situação
   const [isSituacaoModalVisible, setSituacaoModalVisible] = useState(false);
   const situacao = ["Aberto", "Fechado"];
   const selectSituacao = (situacao) => {
