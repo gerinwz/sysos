@@ -552,15 +552,7 @@ export default function OSForm() {
               </View>
 
               <Text style={styles.sectionLabel}>Solicitação Efetuada</Text>
-              <TouchableOpacity
-                onPress={() => handleDateFieldFocus("dataSolicitacao")}
-              >
-                <TextInput
-                  style={[styles.input, styles.roundedInput]}
-                  value={formData.dataSolicitacao}
-                  editable={false}
-                />
-              </TouchableOpacity>
+
               <Field
                 label="Solicitante"
                 value={formData.solicitante}
