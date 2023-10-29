@@ -189,7 +189,7 @@ export default function OSForm() {
       </View>
     </Modal>
   );
-  //Responsavel Tecnico 'responsavelTecnico'
+  //Responsavel Tecnico 'tipo de serviços'
   const [isRespTecModalVisible, setRespTecModalVisible] = useState(false);
   const responsavelTecnico = ["Pedro", "Warley", "Rafael"];
   const selectRespTec = (responsavelTecnico) => {
@@ -214,6 +214,38 @@ export default function OSForm() {
             />
           ))}
           <Button title="Close" onPress={() => setRespTecModalVisible(false)} />
+        </View>
+      </View>
+    </Modal>
+  );
+  //Selecionar tipo de serviço
+    const [isTipoServicoModalVisible, setTipoServicoModalVisible] = useState(false);
+  const tipoServico = ["Pedro", "Warley", "Rafael"];
+  const selectTpoServico = (atipoTipoServico) => {
+    setFormData({ ...formData, tipoServico });
+    setTipoServicoModalVisible(false);
+  };
+  const tipoServicoModal = (
+    <Modal
+      visible={isTipoServicoModalVisible}
+      animationType="slide"
+      transparent={true}
+    >
+      <View style={styles.modalView}>
+        <View style={styles.modalBackground}></View>
+        <View style={styles.tipoServicoModalContent}>
+          <Text style={styles.infOs}>Selecione o Tipo de serviço</Text>
+          {tipoServico.map((tipoServico, index) => (
+            <Button
+              key={index}
+              title={tipoServico}
+              onPress={() => selectTipoServico(atendente)}
+            />
+          ))}
+          <Button
+            title="Close"
+            onPress={() => setTipoServicoModalVisible(false)}
+          />
         </View>
       </View>
     </Modal>
@@ -607,14 +639,18 @@ export default function OSForm() {
                   setFormData({ ...formData, responsavelServicos: text })
                 }
               />
-              <Field
-                label="Tipo de Serviço"
-                value={formData.tipoServico}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, tipoServico: text })
-                }
-              />
-
+            
+              <View>
+                <Text style={styles.label}>tipoServico:</Text>
+                <TouchableOpacity
+                  style={styles.inputBtn}
+                  onPress={() => setTipoServicoModalVisible(true)}
+                >
+                  <Text style={{ color: "white" }}>{formData.tipoServico}</Text>
+                </TouchableOpacity>
+                {tipoServicoModal}
+              </View>
+              
               <Text style={styles.sectionLabel}>Outras Informações</Text>
               <View>
                 <Text style={styles.label}>Transporte:</Text>
