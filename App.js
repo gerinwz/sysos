@@ -16,6 +16,7 @@ import * as MailComposer from "expo-mail-composer";
 import DatePicker from "react-native-modern-datepicker";
 import { getFormatedDate } from "react-native-modern-datepicker";
 import SignatureScreen from "react-native-signature-canvas";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const Field = ({ label, value, onChangeText }) => (
   <View>
@@ -54,6 +55,42 @@ export default function OSForm() {
     isCalendarVisible: false,
     calendarPosition: {},
   });
+
+  //Usando Hora no campo entrada.
+  const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
+  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+  const showDateTimePicker = () => {
+    setDateTimePickerVisibility(true);
+  };
+  const hideDateTimePicker = () => {
+    setDateTimePickerVisibility(false);
+  };
+  const handleDatePicked = (date) => {
+    hideDateTimePicker();
+    setSelectedDateTime(date);
+    const formattedDate = `${date.getHours()}:${date.getMinutes()}`;
+    setFormData({ ...formData, entrada: formattedDate });
+  };
+
+  //Usando Hora no campo Início Almoço.
+  const [isLunchStartPickerVisible, setLunchStartPickerVisibility] = useState(false);
+  const [selectedLunchStartTime, setSelectedLunchStartTime] = useState(new Date());
+  const showLunchStartTimePicker = () => {
+    setLunchStartPickerVisibility(true);
+  };
+
+  const hideLunchStartTimePicker = () => {
+    setLunchStartPickerVisibility(false);
+  };
+
+  const handleLunchStartTimePicked = (date) => {
+    hideLunchStartTimePicker();
+    setSelectedLunchStartTime(date);
+    const formattedTime = `${date.getHours()}:${date.getMinutes()}`;
+    setFormData({ ...formData, inicioAlmocoCliente: formattedTime });
+  };
+
+
   //Selecionar Atendente 'atendente'
   const [isAtendenteModalVisible, setAtendenteModalVisible] = useState(false);
   const atendente = ["Pedro", "Warley", "Rafael"];
@@ -120,7 +157,7 @@ export default function OSForm() {
     </Modal>
   );
 
-//Responsavel Tecnico 'responsavelTecnico'
+  //Responsavel Tecnico 'responsavelTecnico'
   const [isRespTecModalVisible, setRespTecModalVisible] = useState(false);
   const responsavelTecnico = ["Pedro", "Warley", "Rafael"];
   const selectRespTec = (responsavelTecnico) => {
@@ -160,7 +197,7 @@ export default function OSForm() {
     });
   };
   const handleDateSelect = (date) =>
-      setFormData({ ...formData, dataSelecionada: date.dateString });
+    setFormData({ ...formData, dataSelecionada: date.dateString });
 
   const [modalVisible, setModalVisible] = useState(true);
   const [username, setUsername] = useState("");
@@ -468,20 +505,32 @@ export default function OSForm() {
               <Text style={styles.sectionLabel}>
                 Quadro de Horários Cliente
               </Text>
-              <Field
-                label="Entrada"
-                value={formData.entradaCliente}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, entradaCliente: text })
-                }
+              <Text style={styles.label}>Entrada:</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.entrada}
+                onChangeText={(text) => setFormData({ ...formData, entrada: text })}
               />
-              <Field
-                label="Início Almoço"
+              <DateTimePickerModal
+                isVisible={isDateTimePickerVisible}
+                mode="time"
+                onConfirm={handleDatePicked}
+                onCancel={hideDateTimePicker}
+              />
+              <Button title="Escolher Hora" onPress={showDateTimePicker} />
+              <Text style={styles.label}>Início Almoço:</Text>
+              <TextInput
+                style={styles.input}
                 value={formData.inicioAlmocoCliente}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, inicioAlmocoCliente: text })
-                }
+                onChangeText={(text) => setFormData({ ...formData, inicioAlmocoCliente: text })}
               />
+              <DateTimePickerModal
+                isVisible={isLunchStartPickerVisible}
+                mode="time"
+                onConfirm={handleLunchStartTimePicked}
+                onCancel={hideLunchStartTimePicker}
+              />
+              <Button title="Escolher Hora" onPress={showLunchStartTimePicker} />
               <Field
                 label="Fim Almoço"
                 value={formData.fimAlmocoCliente}
@@ -556,7 +605,7 @@ export default function OSForm() {
                 value={
                   signature ? "Assinatura Capturada" : "Nenhuma Assinatura"
                 }
-                onChangeText={() => {}}
+                onChangeText={() => { }}
               />
               <Button
                 title="Responsável Metalsoft Assinar"
@@ -584,7 +633,7 @@ export default function OSForm() {
                 value={
                   signature ? "Assinatura Capturada" : "Nenhuma Assinatura"
                 }
-                onChangeText={() => {}}
+                onChangeText={() => { }}
               />
               <Button
                 title="Responsável Cliente Assinar"
