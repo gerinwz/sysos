@@ -56,24 +56,16 @@ export default function OSForm() {
     isCalendarVisible: false,
     calendarPosition: {},
   });
-  //DATA //Constante para abrir o Modal
-  const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
-  const today = new Date();
-  const startDate = getFormatedDate(
-    today.setDate(today.getDate() - 30),
-    "YYYY/MM/DD"
-  );
-  const [selectedStartDate, setSelectedStartDate] = useState("");
-  const [startedDate, setStartedDate] = useState("12/12/2023");
-  function handleChangeStartDate(propDate) {
-    setStartedDate(propDate);
-  }
-
-  //Função para abrir
-  const handleOnPressStartDate = () => {
-    setOpenStartDatePicker(!openStartDatePicker);
-    (date) => setFormData({ ...formData, dataEmissao: date });
+  // Função para abrir o modal de calendário
+  const openCalendarModal = () => {
+    setFormData({ ...formData, isCalendarVisible: true })
   };
+
+  const handleDateSelect = (date) => {
+    setFormData({ ...formData, dataEmissao: date.dateString });
+    setFormData({ ...formData, isCalendarVisible: false });
+  };
+
   //Selecionar Atendente 'atendente'
   const [isAtendenteModalVisible, setAtendenteModalVisible] = useState(false);
   const atendente = ["Pedro", "Warley", "Rafael"];
@@ -196,19 +188,6 @@ export default function OSForm() {
       </View>
     </Modal>
   );
-
-  const handleDateFieldFocus = (fieldName, layout) => {
-    const position = { top: layout.y + layout.height + 8, left: layout.x };
-    setFormData({
-      ...formData,
-      activeDateField: fieldName,
-      isCalendarVisible: true,
-      calendarPosition: position,
-    });
-  };
-  const handleDateSelect = (date) =>
-    setFormData({ ...formData, dataSelecionada: date.dateString });
-
   const [modalVisible, setModalVisible] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -218,16 +197,16 @@ export default function OSForm() {
     setFormData({
       ...formData,
       [formData.activeDateField]: formData.dataSelecionada,
-      dataEmissão: startedDate,
       activeDateField: "",
       isCalendarVisible: false,
+      dataEmissao: startedDate,
     });
   };
   // CRIAR CSV e anexar ao EMAIL
   const createCSV = async () => {
     try {
       const csvData = [
-        "Data Emissao,Atendente,Situacao,Cliente,Responsavel Tecnico,Data Solicitacao,Solicitante,Descricao Solicitacao,Entrada Metalsoft,Saida Metalsoft,Chegada Metalsoft,Entrada Cliente,Inicio Almoco Cliente,Fim Almoco Cliente,Saida Cliente,Descricao Servicos,Responsavel Servicos,Tipo Servico,Transporte,Outros,Observacao,Assinatura Responsavel Metalsoft,Assinatura Responsavel Cliente",
+        "DataEmissao,Atendente,Situacao,Cliente,Responsavel Tecnico,Data Solicitacao,Solicitante,Descricao Solicitacao,Entrada Metalsoft,Saida Metalsoft,Chegada Metalsoft,Entrada Cliente,Inicio Almoco Cliente,Fim Almoco Cliente,Saida Cliente,Descricao Servicos,Responsavel Servicos,Tipo Servico,Transporte,Outros,Observacao,Assinatura Responsavel Metalsoft,Assinatura Responsavel Cliente",
         `${formData.dataEmissao},${formData.atendente},${formData.situacao},${formData.cliente},${formData.responsavelTecnico},${formData.dataSolicitacao},${formData.solicitante},${formData.descricaoSolicitacao},${formData.entradaMetalsoft},${formData.saidaMetalsoft},${formData.chegadaMetalsoft},${formData.entradaCliente},${formData.inicioAlmocoCliente},${formData.fimAlmocoCliente},${formData.saidaCliente},${formData.descricaoServicos},${formData.responsavelServicos},${formData.tipoServico},${formData.transporte},${formData.outros},${formData.observacao},${formData.assinaturaResponsavelMetalsoft},${formData.assinaturaResponsavelCliente}`,
       ];
 
@@ -351,7 +330,7 @@ export default function OSForm() {
     hideDateTimePicker();
     setSelectedDateTime(date);
     const formattedDate = `${date.getHours()}:${date.getMinutes()}`;
-    setFormData({ ...formData, entrada: formattedDate });
+    setFormData({ ...formData, entradaCliente: formattedDate });
   };
 
   //Usando Hora no campo Início Almoço.
@@ -491,47 +470,37 @@ export default function OSForm() {
           <ScrollView style={styles.appBorder}>
             <View style={styles.osInfoBackground}>
               <Text style={styles.infOs}>Ordem de Serviço MetalSoft</Text>
-              <View>
-                <Text style={styles.label}>Data Emissão:</Text>
-                <TouchableOpacity
-                  style={styles.inputBtn}
-                  onPress={handleOnPressStartDate}
-                >
-                  <Text style={{ color: "white" }}>{selectedStartDate}</Text>
-                </TouchableOpacity>
-              </View>
-
-              {/* Modal do date picker */}
+              {/*DATA EMISSÃO*/}
+              <Field
+                label="Data Emissão"
+                value={formData.dataEmissao}
+                onChangeText={(text) => setFormData({ ...formData, dataEmissao: text })}
+                multiline
+              />
+              <Button title="Selecionar Data" onPress={openCalendarModal} />
               <Modal
                 animationType="slide"
-                transparent={true}
-                visible={openStartDatePicker}
+                transparent={false}
+                visible={formData.isCalendarVisible}
               >
-                <View style={styles.centeredView}>
-                  <View style={styles.modalView}>
-                    <DatePicker
-                      mode="calendar"
-                      minimumDate={startDate}
-                      selected={startedDate}
-                      onDateChanged={handleChangeStartDate}
-                      onSelectedChange={(date) => setSelectedStartDate(date)}
-                      options={{
-                        backgroundColor: "#080516",
-                        textHeaderColor: "#469ab6",
-                        textDefaultColor: "#FFFFFF",
-                        selectedTextColor: "#FFF",
-                        mainColor: "#469ab6",
-                        textSecondaryColor: "#FFFFFF",
-                        borderColor: "rgba(122, 146, 165, 0.1)",
-                      }}
-                    />
-
-                    <TouchableOpacity onPress={handleOnPressStartDate}>
-                      <Text style={{ color: "white" }}>Close</Text>
-                    </TouchableOpacity>
-                  </View>
+                <View style={styles.modalContainer}>
+                  <Calendar
+                    onDayPress={(date) => {
+                      setFormData({
+                        ...formData,
+                        dataEmissao: date.dateString,
+                        isCalendarVisible: false,
+                      });
+                    }}
+                  />
+                  <Button
+                    title="Fechar"
+                    onPress={() => setFormData({ ...formData, isCalendarVisible: false })}
+                  />
                 </View>
               </Modal>
+              {/*FIM DATA EMISSÃO*/}
+
               {/*ATENDENTE*/}
               <View>
                 <Text style={styles.label}>Atendente:</Text>
@@ -583,7 +552,14 @@ export default function OSForm() {
               </View>
 
               <Text style={styles.sectionLabel}>Solicitação Efetuada</Text>
-
+              <Field
+                label="Data da Solicitação"
+                value={formData.dataSolicitacao}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, dataSolicitacao: text })
+                }
+                multiline
+              />
               <Field
                 label="Solicitante"
                 value={formData.solicitante}
@@ -601,14 +577,20 @@ export default function OSForm() {
               />
 
               <Text style={styles.sectionLabel}>
-                Quadro de Horários Cliente
+                Quadro de Horários
+              </Text>
+              <Text style={styles.sectionLabel}>
+                Metalsoft
+              </Text>
+              <Text style={styles.sectionLabel}>
+                Cliente
               </Text>
               <Text style={styles.label}>Entrada:</Text>
               <TextInput
                 style={styles.input}
-                value={formData.entrada}
+                value={formData.entradaCliente}
                 onChangeText={(text) =>
-                  setFormData({ ...formData, entrada: text })
+                  setFormData({ ...formData, entradaCliente: text })
                 }
               />
               <DateTimePickerModal
@@ -720,7 +702,7 @@ export default function OSForm() {
                 value={
                   signature ? "Assinatura Capturada" : "Nenhuma Assinatura"
                 }
-                onChangeText={() => {}}
+                onChangeText={() => { }}
               />
               <Button
                 title="Responsável Metalsoft Assinar"
@@ -748,7 +730,7 @@ export default function OSForm() {
                 value={
                   signature ? "Assinatura Capturada" : "Nenhuma Assinatura"
                 }
-                onChangeText={() => {}}
+                onChangeText={() => { }}
               />
               <Button
                 title="Responsável Cliente Assinar"
