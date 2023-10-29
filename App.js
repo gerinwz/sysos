@@ -86,7 +86,8 @@ export default function OSForm() {
       </View>
     </Modal>
   );
-  //Situação
+
+  //Situação 'situacao'
   const [isSituacaoModalVisible, setSituacaoModalVisible] = useState(false);
   const situacao = ["Aberto", "Fechado"];
   const selectSituacao = (situacao) => {
@@ -119,10 +120,9 @@ export default function OSForm() {
     </Modal>
   );
 
+//Responsavel Tecnico 'responsavelTecnico'
   const [isRespTecModalVisible, setRespTecModalVisible] = useState(false);
-
   const responsavelTecnico = ["Pedro", "Warley", "Rafael"];
-
   const selectRespTec = (responsavelTecnico) => {
     setFormData({ ...formData, responsavelTecnico });
     setRespTecModalVisible(false);
@@ -160,7 +160,8 @@ export default function OSForm() {
     });
   };
   const handleDateSelect = (date) =>
-    setFormData({ ...formData, dataSelecionada: date.dateString });
+      setFormData({ ...formData, dataSelecionada: date.dateString });
+
   const [modalVisible, setModalVisible] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -265,7 +266,6 @@ export default function OSForm() {
   );
   const [selectedStartDate, setSelectedStartDate] = useState("");
   const [startedDate, setStartedDate] = useState("12/12/2023");
-
   function handleChangeStartDate(propDate) {
     setStartedDate(propDate);
   }
@@ -275,7 +275,7 @@ export default function OSForm() {
     setOpenStartDatePicker(!openStartDatePicker);
     (date) => setFormData({ ...formData, dataEmissao: date });
   };
-  //FUNCÇAO TRANSPORTE transporte
+  //FUNCÇAO TRANSPORTE 'transporte'
   const [isTransporteModalVisible, setTransporteModalVisible] = useState(false);
   const transporte = ["Locado", "Proprio", "Onibus", "Aereo"];
   const selectTransporte = (transporte) => {
@@ -308,6 +308,7 @@ export default function OSForm() {
     </Modal>
   );
   return (
+    //INICIO LOGIN
     <ImageBackground
       source={require("./Metal.jpg")}
       style={styles.backgroundImage}
@@ -347,7 +348,9 @@ export default function OSForm() {
               </ImageBackground>
             </View>
           </Modal>
+          //FIM LOGIN
         ) : (
+          //Inicio Ordem de serviço
           <ScrollView style={styles.appBorder}>
             <View style={styles.osInfoBackground}>
               <Text style={styles.infOs}>Ordem de Serviço MetalSoft</Text>
@@ -361,7 +364,7 @@ export default function OSForm() {
                 </TouchableOpacity>
               </View>
 
-              {/* Create modal for date picker */}
+              {/* Modal do date picker */}
               <Modal
                 animationType="slide"
                 transparent={true}
@@ -392,6 +395,7 @@ export default function OSForm() {
                   </View>
                 </View>
               </Modal>
+              {/*ATENDENTE*/}
               <View>
                 <Text style={styles.label}>Atendente:</Text>
                 <TouchableOpacity
@@ -402,6 +406,8 @@ export default function OSForm() {
                 </TouchableOpacity>
                 {atendenteModal}
               </View>
+              {/*FIM ATENDENTE*/}
+              {/*SITUAÇÃO*/}
               <View>
                 <Text style={styles.label}>Situação:</Text>
                 <TouchableOpacity
@@ -412,6 +418,7 @@ export default function OSForm() {
                 </TouchableOpacity>
                 {situacaoModal}
               </View>
+              {/*FIM SITUAÇÃO*/}
               <Field
                 label="Cliente"
                 value={formData.cliente}
